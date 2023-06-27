@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Scan Results</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <style>
+        mark {
+            background-color: yellow;
+            color: black;
+        }
+        .page-break {
+            padding-top: 20px;
+            border-top: 2px solid black;
+            margin-top: 20px;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-3">Scan Results</h1>
+        <button class="btn btn-primary mb-3" onclick="history.go(-1);">Back</button>
+        <button class="btn btn-primary mb-3 ml-3" onclick="window.print()">Print</button>
+        <div class="input-group mb-3">
+            <input id="search" type="text" class="form-control" placeholder="Search..">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" onclick="highlightSearch()">Search</button>
+            </div>
+        </div>
+        <p id="searchCount"></p>
+        <div id="result" class="mt-4">
+            {{ result }}
+        </div>
+    </div>
+    <script>
+        function highlightSearch() {
+            let inputText = document.getElementById('result');
+            let innerHTML = inputText.innerHTML;
+            let searchVal = document.getElementById('search').value;
+            let searchCount = 0;
+            let firstIndex = -1;
+
+            // remove existing highlighting
+            innerHTML = innerHTML.replace(/<mark>/g, '');
+            innerHTML = innerHTML.replace(/<\/mark>/g, '');
+
+            if (searchVal.length > 0) {
+                let index = innerHTML.toLowerCase().indexOf(searchVal.toLowerCase());
+                firstIndex = index;
+                while (index >= 0) {
+                    innerHTML = innerHTML.substring(0,index) + "<mark id='mark" + searchCount + "'>" + innerHTML.substring(index,index+searchVal.length) + "</mark>" + innerHTML.substring(index + searchVal.length);
+                    index = innerHTML.toLowerCase().indexOf(searchVal.toLowerCase(), index + 1 + "<mark></mark>".length);
+                    searchCount++;
+                }
+                inputText.innerHTML = innerHTML;
+                document.getElementById('searchCount').textContent = `Found "${searchVal}" ${searchCount} time(s)`;
+                if (firstIndex != -1) {
+                    document.getElementById('mark0').scrollIntoView();
+                }
+            } else {
+                document.getElementById('searchCount').textContent = "";
+            }
+        }
+    </script>
+</body>
+</html>
