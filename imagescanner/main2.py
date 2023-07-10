@@ -14,8 +14,8 @@ loop = asyncio.new_event_loop()
 asyncio.set_event_loop(loop)
 
 # OpenAI configuration
-openai.organization = "org-Hhs0eGEn8PnZG75ixGcPUcTj"
-openai.api_key = "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"
+openai.organization = enter your key
+openai.api_key = enter your key
 
 
 def preprocess_image(image_path):
